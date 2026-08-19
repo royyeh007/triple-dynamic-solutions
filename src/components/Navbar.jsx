@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react'
 import Logo from './Logo.jsx'
 
 const links = [
-  { href: '#services', label: 'Services' },
-  { href: '#about', label: 'About' },
-  { href: '#why', label: 'Why Us' },
-  { href: '#/x12-studio', label: 'X12 Engine' },
-  { href: '#contact', label: 'Contact' },
+  { href: '/#services', label: 'Services' },
+  { href: '/#about', label: 'About' },
+  { href: '/#why', label: 'Why Us' },
+  { href: '/x12-studio/', label: 'X12 Engine' },
+  { href: '/#contact', label: 'Contact' },
 ]
 
 export default function Navbar() {
@@ -23,7 +23,7 @@ export default function Navbar() {
   return (
     <header className={`navbar ${scrolled ? 'navbar--scrolled' : ''}`}>
       <div className="container navbar__inner">
-        <a href="#home" className="navbar__brand" aria-label="Triple Dynamic Solutions home">
+        <a href="/" className="navbar__brand" aria-label="Triple Dynamic Solutions home">
           <Logo />
         </a>
 
@@ -33,7 +33,7 @@ export default function Navbar() {
               {link.label}
             </a>
           ))}
-          <a href="#contact" className="btn btn--primary navbar__cta" onClick={() => setOpen(false)}>
+          <a href="/#contact" className="btn btn--primary navbar__cta" onClick={() => setOpen(false)}>
             Get a Quote
           </a>
         </nav>

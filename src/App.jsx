@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import Navbar from './components/Navbar.jsx'
 import Footer from './components/Footer.jsx'
 import Background from './components/Background.jsx'
@@ -12,35 +12,32 @@ import X12Studio from './pages/X12Studio.jsx'
 import X12License from './pages/X12License.jsx'
 import X12Paper from './pages/X12Paper.jsx'
 
-// Minimal dependency-free hash routing. Page routes use a "#/" prefix
-// (e.g. #/x12-studio); plain "#section" hashes stay in-page scroll anchors.
-function useHashRoute() {
-  const [hash, setHash] = useState(() => window.location.hash)
-  useEffect(() => {
-    const onChange = () => setHash(window.location.hash)
-    window.addEventListener('hashchange', onChange)
-    return () => window.removeEventListener('hashchange', onChange)
-  }, [])
-  return hash
-}
-
+// Path-based routing. Each page route (/x12-studio/, /x12-paper/,
+// /x12-license/) is its own pre-rendered HTML entry (see scripts/postbuild.mjs),
+// so cross-page links are plain full-page navigations; "#section" hashes remain
+// in-page scroll anchors. The path never changes without a reload, so it can be
+// read once — no router state needed.
 export default function App() {
-  const hash = useHashRoute()
-  // #/x12-license and #/x12-paper are their own pages; every other #/x12…
-  // hash is the studio.
-  const isLicense = hash.startsWith('#/x12-license')
-  const isPaper = hash.startsWith('#/x12-paper')
-  const isStudio = !isLicense && !isPaper && hash.startsWith('#/x12')
+  const path = window.location.pathname
+  const isLicense = path.startsWith('/x12-license')
+  const isPaper = path.startsWith('/x12-paper')
+  const isStudio = !isLicense && !isPaper && path.startsWith('/x12')
 
-  // Reset to top when entering a page route; smooth-scroll to a section anchor
-  // when returning to the home page via a "#section" link from another page.
   useEffect(() => {
-    if (isStudio || isLicense || isPaper) {
-      window.scrollTo(0, 0)
-    } else if (hash && !hash.startsWith('#/')) {
-      document.getElementById(hash.slice(1))?.scrollIntoView({ behavior: 'smooth' })
+    const hash = window.location.hash
+    // Legacy hash routes (pre-2026-08 links like /#/x12-paper) → real paths.
+    if (hash.startsWith('#/x12')) {
+      window.location.replace(
+        hash.startsWith('#/x12-license') ? '/x12-license/'
+          : hash.startsWith('#/x12-paper') ? '/x12-paper/'
+          : '/x12-studio/'
+      )
+      return
     }
-  }, [hash, isStudio, isLicense, isPaper])
+    // Arriving on "/#section" from another page: the anchor target only exists
+    // after React renders, so the browser's own anchor scroll misses it.
+    if (hash) document.getElementById(hash.slice(1))?.scrollIntoView()
+  }, [])
 
   return (
     <>

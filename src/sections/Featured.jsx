@@ -3,7 +3,7 @@ export default function Featured() {
   return (
     <section className="section" id="platform">
       <div className="container">
-        <a className="featured" href="#/x12-studio" aria-label="Explore X12 Mapping Studio">
+        <a className="featured" href="/x12-studio/" aria-label="Explore X12 Mapping Studio">
           <div className="featured__glow" aria-hidden="true" />
 
           <div className="featured__body">

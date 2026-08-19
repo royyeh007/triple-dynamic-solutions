@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-// Self-service license portal (#/x12-license): an existing customer enters
+// Self-service license portal (/x12-license/): an existing customer enters
 // the COMPANY CODE from their onboarding email and the INSTANCE ID from
 // their container's Licensing screen; the signing happens server-side in
 // the vendor's issuing service — no key material ever reaches this page.
@@ -108,7 +108,7 @@ export default function X12License() {
         .x12lic .tip__pop code { font-family: var(--mono); font-size: .85em; }
       `}</style>
 
-      <a className="back" href="#/x12-studio">← Back to X12 Engine</a>
+      <a className="back" href="/x12-studio/">← Back to X12 Engine</a>
       <h1>Generate your X12 Engine license</h1>
       <p className="lead">
         For existing customers — first licenses and <b>renewals</b> alike. You need two things: the{' '}
@@ -214,7 +214,7 @@ export default function X12License() {
 
       <p className="hint" style={{ marginTop: 26 }}>
         Don't have a company code, hit an instance limit, or need to renew your term?{' '}
-        <a href="#contact">Contact us</a> — codes are issued when your account is set up.
+        <a href="/#contact">Contact us</a> — codes are issued when your account is set up.
       </p>
     </main>
   )

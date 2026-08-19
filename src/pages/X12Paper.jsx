@@ -1,4 +1,4 @@
-// Technical brief (#/x12-paper): a mini white paper on @x12/core for a
+// Technical brief (/x12-paper/): a mini white paper on @x12/core for a
 // technologist audience — why the engine is built the way it is and how that
 // differs from cloud EDI APIs, legacy translators, and hand-rolled parsers.
 // Prose-first document layout; deliberately no scroll animations.
@@ -63,7 +63,7 @@ export default function X12Paper() {
         .paper__cta .row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
       `}</style>
 
-      <a className="back" href="#/x12-studio">← Back to the X12 Engine</a>
+      <a className="back" href="/x12-studio/">← Back to the X12 Engine</a>
 
       <header>
         <span className="paper__kicker">Technical brief · @x12/core</span>
@@ -338,8 +338,8 @@ export default function X12Paper() {
           about your interchange volumes and transaction sets.
         </p>
         <div className="row">
-          <a href="#contact" className="btn btn--primary">Request a demo</a>
-          <a href="#/x12-studio" className="btn btn--ghost">Back to the X12 Engine</a>
+          <a href="/#contact" className="btn btn--primary">Request a demo</a>
+          <a href="/x12-studio/" className="btn btn--ghost">Back to the X12 Engine</a>
         </div>
       </div>
     </main>

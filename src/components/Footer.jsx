@@ -14,24 +14,24 @@ export default function Footer() {
 
         <div className="footer__col">
           <h4>Company</h4>
-          <a href="#about">About</a>
-          <a href="#services">Services</a>
-          <a href="#why">Why Us</a>
-          <a href="#contact">Contact</a>
+          <a href="/#about">About</a>
+          <a href="/#services">Services</a>
+          <a href="/#why">Why Us</a>
+          <a href="/#contact">Contact</a>
         </div>
 
         <div className="footer__col">
           <h4>Services</h4>
-          <a href="#services">AI &amp; Automation</a>
-          <a href="#services">Managed IT</a>
-          <a href="#services">Cloud Solutions</a>
-          <a href="#services">Cybersecurity</a>
-          <a href="#services">Custom Software</a>
+          <a href="/#services">AI &amp; Automation</a>
+          <a href="/#services">Managed IT</a>
+          <a href="/#services">Cloud Solutions</a>
+          <a href="/#services">Cybersecurity</a>
+          <a href="/#services">Custom Software</a>
         </div>
 
         <div className="footer__col">
           <h4>Get in touch</h4>
-          <a href="mailto:hello@tdsolve.com">hello@tdsolve.com</a>
+          <a href="mailto:support@tdsolve.com">support@tdsolve.com</a>
           <span className="footer__muted">Mon–Fri, 9am–6pm</span>
         </div>
       </div>

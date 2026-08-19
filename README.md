@@ -25,13 +25,27 @@ npm run preview  # preview the production build locally
 public/
   CNAME          # custom domain for GitHub Pages (tdsolve.com)
   favicon.svg    # placeholder favicon / mark
+  robots.txt     # crawl policy + sitemap pointer
+  404.html       # GitHub Pages not-found page
+  og.png         # social preview card (og:image)
+  count.js       # self-hosted GoatCounter analytics script
 src/
   components/    # Navbar, Footer, Logo (placeholder)
   sections/      # Hero, Services, About, WhyUs, Contact
-  App.jsx        # page composition
+  pages/         # X12Studio, X12Paper, X12License (path-routed)
+  App.jsx        # page composition + path routing
   index.css      # global styles + design tokens
+scripts/
+  postbuild.mjs  # per-route HTML entries (title/meta/JSON-LD) + sitemap.xml
 .github/workflows/deploy.yml   # build + deploy to GitHub Pages
 ```
+
+Page routes (`/x12-studio/`, `/x12-paper/`, `/x12-license/`) are real paths: the
+post-build step stamps a per-route `index.html` with its own title, description,
+canonical, Open Graph tags, and JSON-LD, so each page is independently indexable.
+Old `/#/x12-…` hash links redirect client-side (App.jsx). Analytics is GoatCounter
+(cookie-less, script self-hosted in `public/count.js`) reporting to
+`tdsolve.goatcounter.com` — register that code at goatcounter.com to activate.
 
 ## Deployment
 

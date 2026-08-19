@@ -3,7 +3,7 @@ import StudioDemo from './StudioDemo.jsx'
 
 // Product page for the self-hosted X12 translation engine (@x12/core). The
 // engine is the focal point; the mapping studio and translate API are the
-// tooling that drives it. Reached via the #/x12-studio hash route (App.jsx).
+// tooling that drives it. Served at /x12-studio/ (App.jsx).
 const scrollTo = (id) => (e) => {
   e.preventDefault()
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
@@ -111,7 +111,7 @@ export default function X12Studio() {
               is the product, and it runs entirely inside your network.
             </p>
             <div className="x12-hero__cta">
-              <a href="#contact" className="btn btn--primary">Request a demo</a>
+              <a href="/#contact" className="btn btn--primary">Request a demo</a>
               <a href="#x12-engine" className="btn btn--ghost" onClick={scrollTo('x12-engine')}>
                 How the engine works
               </a>
@@ -157,7 +157,7 @@ export default function X12Studio() {
             <Principle i={3} k="Pure & air-gapped" title="No I/O, zero external calls">The engine makes no network requests; PHI never leaves your box. Fonts bundled locally, no CDNs, no analytics.</Principle>
           </div>
           <p className="x12-note reveal">
-            Want the full argument? <a href="#/x12-paper"><strong>Read the technical brief</strong></a> —
+            Want the full argument? <a href="/x12-paper/"><strong>Read the technical brief</strong></a> —
             the four design decisions behind @x12/core, and how they compare with cloud EDI APIs,
             legacy translators, and hand-rolled parsers.
           </p>
@@ -351,9 +351,9 @@ export default function X12Studio() {
               <span className="p">$</span> docker run -p 3000:3000 -v x12data:/data x12-platform{'\n'}
               <span className="p"># →</span> <span className="a">http://localhost:3000</span>  engine + studio + API
             </div>
-            <a href="#contact" className="btn btn--primary">Talk to us about EDI</a>
-            <a href="#/x12-paper" className="btn btn--ghost">Read the technical brief</a>
-            <a href="#/x12-license" className="btn btn--ghost">Existing customer? Generate your license →</a>
+            <a href="/#contact" className="btn btn--primary">Talk to us about EDI</a>
+            <a href="/x12-paper/" className="btn btn--ghost">Read the technical brief</a>
+            <a href="/x12-license/" className="btn btn--ghost">Existing customer? Generate your license →</a>
           </div>
         </div>
       </section>
