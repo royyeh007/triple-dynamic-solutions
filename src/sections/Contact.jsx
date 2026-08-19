@@ -13,7 +13,7 @@ export default function Contact() {
     const message = form.message.value
     const subject = encodeURIComponent(`Website inquiry from ${name}`)
     const body = encodeURIComponent(`${message}\n\nFrom: ${name} <${email}>`)
-    window.location.href = `mailto:hello@tdsolve.com?subject=${subject}&body=${body}`
+    window.location.href = `mailto:support@tdsolve.com?subject=${subject}&body=${body}`
     setSent(true)
   }
 
@@ -30,7 +30,7 @@ export default function Contact() {
           </p>
 
           <ul className="contact__details">
-            <li><strong>Email</strong><a href="mailto:hello@tdsolve.com">hello@tdsolve.com</a></li>
+            <li><strong>Email</strong><a href="mailto:support@tdsolve.com">support@tdsolve.com</a></li>
             <li><strong>Hours</strong><span>Monday – Friday, 9:00am – 6:00pm</span></li>
           </ul>
         </div>
