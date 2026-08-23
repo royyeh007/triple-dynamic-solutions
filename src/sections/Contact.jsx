@@ -22,11 +22,10 @@ export default function Contact() {
       <div className="container contact__inner">
         <div className="contact__info">
           <span className="section__eyebrow">Get in touch</span>
-          <h2 className="section__title">Let's talk about your technology — and AI</h2>
+          <h2 className="section__title">Let's talk about your technology</h2>
           <p>
-            Tell us where you want to go — including where AI could save time or open new
-            opportunities — and we'll map out how to get there. Schedule a free,
-            no-obligation consultation today.
+            Tell us about your environment and your goals, and we'll outline a practical
+            path forward. Consultations are free and carry no obligation.
           </p>
 
           <ul className="contact__details">
@@ -50,7 +49,7 @@ export default function Contact() {
           </div>
           <button type="submit" className="btn btn--primary btn--block">Send Message</button>
           {sent && (
-            <p className="contact__note">Thanks! Your email client should now be open.</p>
+            <p className="contact__note">Thank you. Your email client should open with your message ready to send.</p>
           )}
         </form>
       </div>

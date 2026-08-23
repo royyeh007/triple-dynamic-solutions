@@ -10,9 +10,9 @@ export default function Featured() {
             <span className="section__eyebrow">Our EDI engine</span>
             <h2 className="featured__title">X12 Translation Engine</h2>
             <p className="featured__lead">
-              A pure, self-hosted X12 engine: 33 transaction sets as data, SNIP compliance
-              built in, and byte-identical output every time. A visual studio and one-call
-              API come along to drive it — all in a single container, zero external requests.
+              A self-hosted X12 translation engine with 33 transaction sets, SNIP L1–L7
+              validation, and deterministic output, packaged with a visual mapping studio
+              and an HTTP API in a single container.
             </p>
             <div className="featured__stats">
               <div><strong>33</strong><span>transaction sets</span></div>

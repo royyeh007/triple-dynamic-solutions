@@ -352,6 +352,7 @@ img, svg { display: block; }
   width: 52px; height: 52px;
   display: grid; place-items: center;
   font-size: 1.5rem;
+  color: var(--accent);
   border-radius: 12px;
   background: rgba(56, 189, 248, 0.1);
   margin-bottom: 18px;

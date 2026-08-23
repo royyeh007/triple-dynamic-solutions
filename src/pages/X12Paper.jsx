@@ -69,8 +69,8 @@ export default function X12Paper() {
         <span className="paper__kicker">Technical brief · @x12/core</span>
         <h1>Why the engine is the product</h1>
         <p className="paper__sub">
-          Four design decisions behind <strong>@x12/core</strong>, our self-hosted X12 translation
-          engine — and why they matter more to an EDI program than any feature list.
+          The four design decisions behind <strong>@x12/core</strong>, our self-hosted X12
+          translation engine, and their practical consequences for an EDI program.
         </p>
         <div className="paper__meta">
           <span>Triple Dynamic Solutions</span>
@@ -83,48 +83,48 @@ export default function X12Paper() {
       <div className="paper__abstract">
         <h2>Abstract</h2>
         <p>
-          Most EDI incidents are not parsing failures — they are drift failures. The mapping that
-          passed in the test tool emits different bytes in production; the validator disagrees with
-          the translator; an edit silently changes what a live endpoint returns. @x12/core is built
-          to make drift impossible by construction: the engine is a pure function, the X12
-          specification is typed data rather than code, SNIP validation runs inside the engine
-          rather than beside it, and every mapping is an immutable revision that must pass
-          validation before it can serve traffic. This brief walks through each decision and its
-          consequences, then compares the result with the three common alternatives.
+          Many EDI failures are not parsing failures but consistency failures: a mapping that
+          passed in a test tool emits different bytes in production, a validator disagrees with
+          the translator, or an edit silently changes the output of a live endpoint. @x12/core is
+          designed to remove these failure modes structurally. The engine is a pure function; the
+          X12 specification is represented as typed data rather than code; SNIP validation runs
+          inside the engine; and every mapping is an immutable revision that must pass validation
+          before it can serve traffic. This brief describes each decision and its consequences,
+          and compares the result with the common alternatives.
         </p>
       </div>
 
       <section>
         <h2 className="paper__h"><span className="n">01</span>Where EDI tooling goes wrong</h2>
         <p>
-          Thirty years in, teams that need to speak X12 still choose between three shapes of
+          Teams that need to exchange X12 documents generally choose between three categories of
           tooling, each with a structural weakness:
         </p>
         <ul>
           <li>
-            <strong>Cloud translation APIs and clearinghouses.</strong> Convenient, but your
-            documents — in healthcare, PHI — leave your network on every call, and the translator
-            is a black box: you cannot run it in CI, diff its output offline, or audit exactly what
-            it will emit before it emits it.
+            <strong>Cloud translation APIs and clearinghouses.</strong> Convenient, but documents
+            (in healthcare, PHI) leave your network on every call, and the translator itself is
+            opaque: it cannot run in CI, its output cannot be diffed offline, and its exact
+            behavior cannot be audited in advance.
           </li>
           <li>
-            <strong>Legacy on-prem translators.</strong> Mappings live in a proprietary designer
-            and compile into an opaque runtime. The design-time preview and the production path are
-            different code, so "works in the tool, breaks on the wire" is a routine failure mode —
-            and every new transaction set is a consulting engagement.
+            <strong>Legacy on-premise translators.</strong> Mappings are built in a proprietary
+            designer and compiled into a separate runtime. Because the design-time preview and the
+            production path are different code, discrepancies between the two are a routine
+            failure mode, and new transaction sets typically require vendor services.
           </li>
           <li>
-            <strong>Hand-rolled parsers and open-source libraries.</strong> Parsing segments is the
-            easy 10%. The hard 90% is the specification itself — loops, situational rules, code
-            sets, balancing — which ends up re-implemented as scattered application code, with
-            validation coverage that stops at "it parsed."
+            <strong>Hand-rolled parsers and open-source libraries.</strong> Parsing segments is a
+            small fraction of the work. Most of the effort is the specification itself: loops,
+            situational rules, code sets, and balancing, which end up re-implemented as
+            application code with limited validation coverage.
           </li>
         </ul>
         <p>
-          The common thread: in all three, <strong>the thing that validates, the thing that
-          translates, and the thing you tested are not the same thing.</strong> That gap is where
-          EDI programs bleed time. @x12/core closes it by making one engine the single source of
-          truth — everything else in the product exists to drive it.
+          In all three cases, <strong>the component that validates, the component that
+          translates, and the component that was tested are not the same.</strong> @x12/core
+          removes that gap by making a single engine the source of truth for translation and
+          validation; the rest of the product exists to drive it.
         </p>
       </section>
 
@@ -132,31 +132,32 @@ export default function X12Paper() {
         <h2 className="paper__h"><span className="n">02</span>Decision 1 — the engine is a pure function</h2>
         <p>
           @x12/core contains no I/O. It never touches the network or the filesystem, reads no
-          clock, and draws no randomness — everything that varies, including envelope values and
+          clock, and draws no randomness. Everything that varies, including envelope values and
           control numbers, enters as explicit input. Conceptually, translation is one function:
         </p>
         <code className="paper__sig">
           translate(<span className="a">spec</span>, <span className="a">mapping</span>, <span className="a">payload</span>) <span className="c">→</span> {'{'} x12, valid, issues {'}'}<br />
-          <span className="c">// same inputs → byte-identical output. always.</span>
+          <span className="c">// identical inputs produce identical output</span>
         </code>
         <p>
-          Purity sounds academic; its consequences are anything but:
+          This has three practical consequences:
         </p>
         <ul>
           <li>
-            <strong>The preview is the product.</strong> The mapping studio and{' '}
+            <strong>The preview matches production.</strong> The mapping studio and{' '}
             <code>POST /api/translate</code> execute the same engine, so the wire an analyst sees
-            while mapping is byte-identical to what production ships. There is no second
-            implementation to drift.
+            while mapping is byte-identical to what production sends. There is no second
+            implementation to fall out of sync.
           </li>
           <li>
-            <strong>It is trivially testable.</strong> Deterministic output makes golden-file
-            testing honest: every installed spec is verified byte-for-byte through the full
-            pipeline, and you can diff engine output in your own CI the same way.
+            <strong>It is directly testable.</strong> Deterministic output makes golden-file
+            testing reliable: every installed specification is verified byte-for-byte through the
+            full pipeline, and engine output can be diffed in CI the same way.
           </li>
           <li>
-            <strong>It runs air-gapped.</strong> A function that performs no I/O has nothing to
-            phone home to. Zero external requests at runtime is not a policy — it is a property.
+            <strong>It runs air-gapped.</strong> Because the engine performs no I/O, zero external
+            requests at runtime is a structural property of the code rather than a configuration
+            setting.
           </li>
         </ul>
         <div className="paper__fig" role="img" aria-label="The studio preview and the translate API both call the same @x12/core engine, producing identical bytes">
@@ -171,32 +172,32 @@ export default function X12Paper() {
             <div className="paper__fig-box"><b>POST /api/translate</b><span>production traffic</span></div>
             <div className="paper__fig-arrow">↗</div>
           </div>
-          <p className="paper__fig-cap">One engine, two drivers. What you validate is exactly what ships.</p>
+          <p className="paper__fig-cap">The studio and the API drive the same engine and produce identical output.</p>
         </div>
       </section>
 
       <section>
         <h2 className="paper__h"><span className="n">03</span>Decision 2 — the specification is data, not code</h2>
         <p>
-          Everything the engine knows about X12 — segment and element rules, code sets,
-          documentation, wire templates — lives as typed data, not as branching logic. The engine
-          is a small, stable interpreter of that data; the 33 installed transaction sets, from
-          270/271 eligibility through 837 claims to 850 purchase orders and 820 remittance, are
-          data files it walks.
+          Everything the engine knows about X12, from segment and element rules to code sets,
+          documentation, and wire templates, lives as typed data rather than branching logic. The
+          engine is a small, stable interpreter of that data; the 33 installed transaction sets,
+          from 270/271 eligibility through 837 claims to 850 purchase orders and 820 remittance,
+          are data files that it interprets.
         </p>
         <p>
-          This inverts the economics of coverage. In a conventional translator, each transaction
-          set is code, so each addition risks the ones that already work. Here,{' '}
-          <strong>adding a transaction set is a data file, not a code change</strong> — and every
-          spec ships with golden-file tests comparing the full pipeline byte-for-byte, so coverage
-          grows without destabilizing the core. It is also why the studio can render
-          documentation, sample payloads, and live validation for every set uniformly: they are
-          all views of the same data.
+          This changes the economics of coverage. In a conventional translator, each transaction
+          set is code, so each addition carries risk for the ones that already work. Here,{' '}
+          <strong>adding a transaction set is a data change rather than a code change</strong>,
+          and every specification ships with golden-file tests comparing the full pipeline
+          byte-for-byte, so coverage grows without destabilizing the core. The same design is why
+          the studio can render documentation, sample payloads, and live validation uniformly for
+          every set: they are all views of the same data.
         </p>
-        <Aside title="Why it matters to you">
+        <Aside title="In practice">
           <p>
-            When a partner asks for a transaction set you don't run yet, the answer is a data file
-            with tests — not a project, not a version migration, not a consultant.
+            When a trading partner requires a transaction set you do not yet run, supporting it
+            means adding a tested data file rather than commissioning a project.
           </p>
         </Aside>
       </section>
@@ -204,11 +205,11 @@ export default function X12Paper() {
       <section>
         <h2 className="paper__h"><span className="n">04</span>Decision 3 — validation lives inside the engine</h2>
         <p>
-          SNIP validation levels L1 through L7 — element syntax, structural rules, balancing,
-          situational requirements, code-set membership, and partner-pack rules including NPI and
-          ICD-10 checks where the spec defines them — are enforced by the engine itself, not by a
-          separate validator product. The validator can never disagree with the translator, because
-          they are the same code walking the same spec data.
+          SNIP validation levels L1 through L7, covering element syntax, structural rules,
+          balancing, situational requirements, code-set membership, and partner-specific rules
+          such as NPI and ICD-10 checks where the specification defines them, are enforced by the
+          engine itself rather than by a separate validator product. The validator cannot disagree
+          with the translator, because they are the same code reading the same specification data.
         </p>
         <p>
           Because validation is intrinsic, it gates every stage with the same rules:
@@ -223,35 +224,35 @@ export default function X12Paper() {
       <section>
         <h2 className="paper__h"><span className="n">05</span>Decision 4 — history is immutable</h2>
         <p>
-          Saving a mapping never edits it — it appends a new revision. Callers pin the revision
+          Saving a mapping never edits it; it appends a new revision. Callers pin the revision
           they were certified against, or omit it to follow the explicitly activated one. Only
           revisions that pass validation can be activated, and nothing rewrites history, so an
-          edit can never silently change what a production endpoint emits. Rollback is re-pinning,
-          and reproducing last month's bytes is running last month's revision — same engine, same
-          inputs, same output.
+          edit can never silently change what a production endpoint emits. Rolling back means
+          re-pinning an earlier revision, and reproducing historical output means re-running the
+          revision that produced it.
         </p>
         <p>
-          Combined with determinism, this gives an EDI program something it rarely has:{' '}
-          <strong>a complete, replayable audit trail</strong>. Any interchange you ever produced
-          can be regenerated exactly, from the revision that produced it.
+          Combined with deterministic output, this provides{' '}
+          <strong>a complete, replayable audit trail</strong>: any interchange ever produced can
+          be regenerated exactly from the revision that produced it.
         </p>
       </section>
 
       <section>
         <h2 className="paper__h"><span className="n">06</span>The deployment model follows from the architecture</h2>
         <p>
-          Because the engine is pure and the spec is data, the whole platform collapses into one
-          container: engine, mapping studio, and API in a single process on a single origin, with
-          immutable revisions stored in SQLite via <code>node:sqlite</code> — no native
-          dependencies, no external database. It makes zero external requests at runtime; fonts
-          are bundled and there are no CDNs and no analytics. Your documents, and in healthcare
-          your PHI, never leave your network — the software runs where the data already is,
-          including fully air-gapped environments.
+          Because the engine is pure and the specification is data, the platform is delivered as
+          a single container: engine, mapping studio, and API in one process on one origin, with
+          immutable revisions stored in SQLite via <code>node:sqlite</code>. There are no native
+          dependencies and no external database. The platform makes zero external requests at
+          runtime; fonts are bundled, and there are no CDNs or analytics. Documents, including
+          PHI in healthcare deployments, never leave your network, and the software runs in fully
+          air-gapped environments.
         </p>
         <p>
-          For a security review, the surface to reason about is one process you host, whose engine
-          provably performs no I/O. That is a materially shorter conversation than a cloud data
-          processing agreement.
+          For a security review, the surface to assess is one self-hosted process whose engine
+          performs no I/O. That is a significantly smaller scope than a third-party data
+          processing arrangement.
         </p>
       </section>
 
@@ -271,45 +272,45 @@ export default function X12Paper() {
             <tbody>
               <tr>
                 <td>Where your data goes</td>
-                <td>Vendor's cloud, every call</td>
-                <td>Stays on-prem</td>
+                <td>Vendor cloud, on every call</td>
+                <td>Stays on-premise</td>
                 <td>Stays in-house</td>
-                <td className="us">Your network only — zero external requests</td>
+                <td className="us">Your network only; zero external requests</td>
               </tr>
               <tr>
                 <td>Preview vs production</td>
-                <td>Black box — test against live service</td>
-                <td>Separate designer &amp; runtime; drift is routine</td>
-                <td>Whatever you build</td>
-                <td className="us">Same pure engine — byte-identical</td>
+                <td>Opaque; testing requires the live service</td>
+                <td>Separate designer and runtime; prone to drift</td>
+                <td>Depends on implementation</td>
+                <td className="us">Same engine; byte-identical</td>
               </tr>
               <tr>
                 <td>Spec knowledge</td>
                 <td>Vendor-maintained, opaque</td>
                 <td>Compiled into maps per project</td>
-                <td>Re-implemented as app code</td>
+                <td>Re-implemented as application code</td>
                 <td className="us">Typed data, 33 sets, golden-file tested</td>
               </tr>
               <tr>
                 <td>Validation</td>
                 <td>Varies; often a separate step</td>
                 <td>Separate validator product</td>
-                <td>Usually stops at "it parsed"</td>
-                <td className="us">SNIP L1–L7 inside the engine, gating every stage</td>
+                <td>Typically limited to parsing</td>
+                <td className="us">SNIP L1–L7 inside the engine, applied at every stage</td>
               </tr>
               <tr>
                 <td>Change safety</td>
                 <td>Vendor release cycle</td>
                 <td>Edits go live on deploy</td>
-                <td>Code review, hopefully</td>
+                <td>Depends on process</td>
                 <td className="us">Immutable pinned revisions; only validated revisions activate</td>
               </tr>
               <tr>
                 <td>Runs in CI / air-gapped</td>
                 <td>No</td>
-                <td>Rarely — heavyweight installs</td>
-                <td>Yes, minus the spec</td>
-                <td className="us">Yes — one container, deterministic output</td>
+                <td>Rarely; heavyweight installations</td>
+                <td>Partially; specification coverage is manual</td>
+                <td className="us">Yes; one container with deterministic output</td>
               </tr>
             </tbody>
           </table>
@@ -317,25 +318,25 @@ export default function X12Paper() {
       </section>
 
       <section>
-        <h2 className="paper__h"><span className="n">08</span>What this buys you in practice</h2>
+        <h2 className="paper__h"><span className="n">08</span>Practical consequences</h2>
         <ul>
-          <li><strong>Certification without ceremony.</strong> Partner testing runs against the same bytes production will send — diff engine output in CI like any other artifact.</li>
-          <li><strong>Compliance posture by construction.</strong> Self-hosted, air-gapped, no third-party data processor in the path of PHI.</li>
-          <li><strong>Incidents that end in minutes.</strong> Pinned revisions plus determinism mean any historical output is exactly reproducible — no "what was the mapping doing that day?"</li>
-          <li><strong>A team that scales.</strong> Analysts map by business concept in the studio; engineers integrate one <code>POST /api/translate</code> call. Neither hand-writes X12.</li>
+          <li><strong>Simpler partner certification.</strong> Partner testing runs against the same bytes production will send, and engine output can be diffed in CI like any other build artifact.</li>
+          <li><strong>A smaller compliance surface.</strong> Self-hosted and air-gapped, with no third-party data processor in the path of PHI.</li>
+          <li><strong>Faster incident resolution.</strong> Pinned revisions and deterministic output make any historical interchange exactly reproducible.</li>
+          <li><strong>A clear division of labor.</strong> Analysts map by business concept in the studio, and engineers integrate a single <code>POST /api/translate</code> call.</li>
         </ul>
         <p>
-          None of these are features bolted onto the product. Each one falls out of the four
-          decisions above — which is the point. Features can be copied; properties have to be
-          designed in from the start. The engine is the product.
+          Each of these follows directly from the four design decisions rather than from
+          individual features. They are properties of the architecture, and they are the reason
+          the engine, rather than the tooling around it, is the product.
         </p>
       </section>
 
       <div className="paper__cta">
-        <h2>Read enough theory?</h2>
+        <h2>See it in practice</h2>
         <p>
-          See the engine drive a real 270 eligibility mapping on the product page, or talk to us
-          about your interchange volumes and transaction sets.
+          Watch the engine drive a real 270 eligibility mapping on the product page, or contact
+          us to discuss your transaction sets and volumes.
         </p>
         <div className="row">
           <a href="/#contact" className="btn btn--primary">Request a demo</a>

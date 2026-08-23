@@ -1,27 +1,27 @@
 const reasons = [
   {
     title: 'Fast, human response',
-    desc: 'Real engineers, not phone trees — with AI triage that routes and resolves the routine instantly, so people focus on what matters.',
+    desc: 'Calls and tickets go to engineers who know your environment, with automated triage handling routine requests quickly.',
   },
   {
-    title: 'AI where it counts',
-    desc: 'We apply AI where it delivers real ROI — automation, insight, and support — and skip the hype where it doesn’t.',
+    title: 'Practical use of AI',
+    desc: 'We apply AI where it delivers measurable value in automation, reporting, and support, and we are direct about where it does not.',
   },
   {
     title: 'Security-first mindset',
-    desc: 'AI-driven threat detection and compliance are baked into every solution we deliver, from day one.',
+    desc: 'Threat detection, access control, and compliance are designed into every solution we deliver from the start.',
   },
   {
     title: 'Predictable pricing',
-    desc: 'Flat-rate plans and clear scopes — no surprise invoices, ever.',
+    desc: 'Flat-rate plans and clearly defined scopes, so costs stay predictable.',
   },
   {
     title: 'Scales with you',
     desc: 'From your first hire to your next office, our solutions grow alongside your business.',
   },
   {
-    title: 'Future-ready',
-    desc: 'We keep your stack ready for what’s next, so adopting new AI capabilities is a step — not a rebuild.',
+    title: 'Built on standards',
+    desc: 'We build on well-supported platforms, so adopting new capabilities rarely means starting over.',
   },
 ]
 
@@ -31,7 +31,7 @@ export default function WhyUs() {
       <div className="container">
         <div className="section__head">
           <span className="section__eyebrow">Why Triple Dynamic</span>
-          <h2 className="section__title">Businesses choose us because we deliver — intelligently</h2>
+          <h2 className="section__title">Why businesses work with us</h2>
         </div>
 
         <div className="grid grid--2">

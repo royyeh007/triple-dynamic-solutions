@@ -21,11 +21,11 @@ export default function Hero() {
         {/* Intro row below the nav */}
         <div className="hero-v__intro">
           <p className="hero-v__intro-lead">
-            We design, secure, and manage the technology growing companies rely on —
-            now supercharged with AI: intelligent monitoring, automated response, and
-            custom copilots, delivered with a personal touch.
+            We design, secure, and manage the technology that growing companies rely on.
+            That includes intelligent monitoring, automated incident response, and custom
+            AI tooling, delivered by a team that knows your environment.
           </p>
-          <p className="hero-v__intro-stat">AI-driven uptime &amp; security, 24/7 !</p>
+          <p className="hero-v__intro-stat">Monitoring and security coverage, 24/7.</p>
         </div>
 
         {/* Center hero */}
@@ -36,7 +36,7 @@ export default function Hero() {
             <span className="hero-v__line shiny-text">thinks ahead.</span>
           </h1>
           <a href="#contact" className="hero-v__cta">
-            <span>Get a Free Consultation</span>
+            <span>Schedule a Consultation</span>
             <svg
               className="hero-v__cta-arrow"
               width="18"

@@ -56,7 +56,7 @@ export default function X12License() {
       })
       const body = await r.json().catch(() => ({}))
       if (!r.ok) {
-        setError(body.error || 'The issuing service is unavailable — try again shortly')
+        setError(body.error || 'The issuing service is unavailable. Please try again shortly.')
         // A cap refusal names the instances holding the slots, so "that's
         // our old QA box, please free it" is a one-line email.
         if (Array.isArray(body.instances)) setErrorInstances(body.instances)
@@ -73,7 +73,7 @@ export default function X12License() {
       a.click()
       URL.revokeObjectURL(a.href)
     } catch {
-      setError('Could not reach the issuing service — check your connection and try again')
+      setError('Could not reach the issuing service. Please check your connection and try again.')
     } finally {
       setBusy(false)
     }
@@ -111,11 +111,12 @@ export default function X12License() {
       <a className="back" href="/x12-studio/">← Back to X12 Engine</a>
       <h1>Generate your X12 Engine license</h1>
       <p className="lead">
-        For existing customers — first licenses and <b>renewals</b> alike. You need two things: the{' '}
-        <b>company code</b> from your onboarding email, and the <b>Instance ID</b> shown on your
-        container's <b>Licensing</b> screen (it has a Copy button). The license is issued bound to
-        that instance and recorded with your account. Renewing? Same form, same Instance ID — once
-        your term has been extended, the new file simply carries the later expiry.
+        For existing customers, covering both first licenses and <b>renewals</b>. You will need
+        the <b>company code</b> from your onboarding email and the <b>Instance ID</b> shown on
+        your container's <b>Licensing</b> screen (it has a Copy button). The license is issued
+        for that specific instance and recorded with your account. To renew, submit the same form
+        with the same Instance ID; once your term has been extended, the new file carries the
+        updated expiry date.
       </p>
 
       <div className="card">
@@ -123,8 +124,8 @@ export default function X12License() {
           <label htmlFor="lic-code">Company code</label>
           <InfoTip label="Company code">
             <b>What it is:</b> your account identifier, issued when your account is set up.{' '}
-            <b>Where to get it:</b> in your onboarding email from Triple Dynamic Solutions — it looks
-            like <code>TDS-1A2B3C4D</code>.
+            <b>Where to get it:</b> in your onboarding email from Triple Dynamic Solutions. It
+            looks like <code>TDS-1A2B3C4D</code>.
           </InfoTip>
         </div>
         <input id="lic-code" type="text" placeholder="TDS-1A2B3C4D" value={companyCode}
@@ -133,8 +134,8 @@ export default function X12License() {
         <div className="field-label">
           <label htmlFor="lic-instance">Instance ID</label>
           <InfoTip label="Instance ID">
-            <b>What it is:</b> a unique ID for this deployment. Each deployment has its own — issue
-            one license per deployment.{' '}
+            <b>What it is:</b> a unique ID for this deployment. Each deployment has its own, and
+            each needs its own license.{' '}
             <b>Where to get it:</b> in the studio, <b>Licensing → Instance ID → Copy</b>.
           </InfoTip>
         </div>
@@ -172,7 +173,7 @@ export default function X12License() {
                     <li key={id}><code>{id}</code></li>
                   ))}
                 </ul>
-                If one of these is a retired deployment, tell us which — we'll free the slot.
+                If one of these is a retired deployment, let us know and we will release the slot.
               </div>
             )}
           </div>
@@ -193,7 +194,7 @@ export default function X12License() {
           <ol>
             <li>Open your container's <b>Licensing</b> screen.</li>
             <li><b>Upload…</b> the file (or paste its contents) → <b>Install license</b>.</li>
-            <li>It takes effect immediately — no restart.</li>
+            <li>It takes effect immediately; no restart is required.</li>
           </ol>
           {issued.slots && (
             <div className="hint" style={{ marginTop: 10 }}>
@@ -202,19 +203,19 @@ export default function X12License() {
               </b>{' '}
               {issued.environment === 'non-production' ? 'non-production' : 'production'} instance
               slot{issued.slots.cap === 1 ? '' : 's'} left on your account
-              {issued.slots.remaining === 0 ? ' — contact us if you need more' : ''}.
+              {issued.slots.remaining === 0 ? '; contact us if you need more' : ''}.
             </div>
           )}
           <div className="hint">
-            Wrong file or lost it? Run this form again with the same Instance ID — re-issuing for an
-            instance you already licensed is always allowed.
+            If you lose the file, submit this form again with the same Instance ID; re-issuing
+            for an instance you have already licensed is always permitted.
           </div>
         </div>
       )}
 
       <p className="hint" style={{ marginTop: 26 }}>
-        Don't have a company code, hit an instance limit, or need to renew your term?{' '}
-        <a href="/#contact">Contact us</a> — codes are issued when your account is set up.
+        If you don't have a company code, have reached an instance limit, or need to extend your
+        term, <a href="/#contact">contact us</a>. Codes are issued when your account is set up.
       </p>
     </main>
   )
