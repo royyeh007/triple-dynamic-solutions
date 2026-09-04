@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import StudioDemo from './StudioDemo.jsx'
+import RequestDemo from '../components/RequestDemo.jsx'
 
 // Product page for the self-hosted X12 translation engine (@x12/core). The
 // engine is the focal point; the mapping studio and translate API are the
@@ -111,7 +112,7 @@ export default function X12Studio() {
               mapping studio and an HTTP API, and it runs entirely inside your network.
             </p>
             <div className="x12-hero__cta">
-              <a href="/#contact" className="btn btn--primary">Request a demo</a>
+              <a href="#x12-request" className="btn btn--primary" onClick={scrollTo('x12-request')}>Request a demo</a>
               <a href="#x12-engine" className="btn btn--ghost" onClick={scrollTo('x12-engine')}>
                 How the engine works
               </a>
@@ -335,6 +336,9 @@ export default function X12Studio() {
           </div>
         </div>
       </section>
+
+      {/* Request a demo */}
+      <RequestDemo />
 
       {/* Run / CTA */}
       <section className="section section--alt">
